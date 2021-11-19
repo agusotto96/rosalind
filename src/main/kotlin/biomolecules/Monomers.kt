@@ -41,7 +41,7 @@ enum class AminoAcid : Monomer {
     Tyrosine
 }
 
-fun symbol(monomer: Monomer) = when (monomer) {
+fun symbol(monomer: Monomer): Char = when (monomer) {
     DNANucleotide.Adenine -> 'A'
     DNANucleotide.Cytosine -> 'C'
     DNANucleotide.Guanine -> 'G'
@@ -83,7 +83,7 @@ fun complement(nucleotide: Nucleotide): Nucleotide = when (nucleotide) {
     RNANucleotide.Uracil -> RNANucleotide.Adenine
 }
 
-fun isGc(nucleotide: Nucleotide) = when (nucleotide) {
+fun isGc(nucleotide: Nucleotide): Boolean = when (nucleotide) {
     DNANucleotide.Guanine,
     DNANucleotide.Cytosine,
     RNANucleotide.Guanine,
@@ -91,7 +91,7 @@ fun isGc(nucleotide: Nucleotide) = when (nucleotide) {
     else -> false
 }
 
-fun isPurine(nucleotide: Nucleotide) = when (nucleotide) {
+fun isPurine(nucleotide: Nucleotide): Boolean = when (nucleotide) {
     DNANucleotide.Adenine,
     DNANucleotide.Guanine,
     RNANucleotide.Adenine,
@@ -99,9 +99,9 @@ fun isPurine(nucleotide: Nucleotide) = when (nucleotide) {
     else -> false
 }
 
-fun isPyrimidine(nucleotide: Nucleotide) = !isPurine(nucleotide)
+fun isPyrimidine(nucleotide: Nucleotide): Boolean = !isPurine(nucleotide)
 
-fun mass(aminoAcid: AminoAcid) = when (aminoAcid) {
+fun mass(aminoAcid: AminoAcid): Double = when (aminoAcid) {
     AminoAcid.Alanine -> 071.03711
     AminoAcid.Cysteine -> 103.00919
     AminoAcid.AsparticAcid -> 115.02694

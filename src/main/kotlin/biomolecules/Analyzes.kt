@@ -1,26 +1,44 @@
 package biomolecules
 
-fun String(polymer: Polymer) = polymer.map(::symbol).joinToString("")
+fun String(polymer: Polymer): String {
+    return polymer.map(::symbol).joinToString("")
+}
 
-fun countMonomers(polymer: Polymer) = polymer.groupingBy { it }.eachCount()
+fun <M : Monomer> countMonomers(polymer: List<M>): Map<M, Int> {
+    return polymer.groupingBy { it }.eachCount()
+}
 
-fun subPolymer(polymer: Polymer, from: Int, to: Int) = polymer.subList(from, to + 1)
+fun <M : Monomer> subPolymer(polymer: List<M>, from: Int, to: Int): List<M> {
+    return polymer.subList(from, to + 1)
+}
 
-fun countMismatches(a: Polymer, b: Polymer) = a.zip(b).count { it.first != it.second }
+fun countMismatches(a: Polymer, b: Polymer): Int {
+    return a.zip(b).count { it.first != it.second }
+}
 
-fun locate(polymer: Polymer, subPolymer: Polymer) = polymer
-    .windowed(subPolymer.count())
-    .mapIndexedNotNull { index, window -> if (window == subPolymer) index else null }
+fun locate(polymer: Polymer, subPolymer: Polymer): List<Int> {
+    return polymer
+        .windowed(subPolymer.count())
+        .mapIndexedNotNull { index, window -> if (window == subPolymer) index else null }
+}
 
-fun contains(polymer: Polymer, subPolymer: Polymer) = polymer.windowed(subPolymer.count()).contains(subPolymer)
+fun contains(polymer: Polymer, subPolymer: Polymer): Boolean {
+    return polymer.windowed(subPolymer.count()).contains(subPolymer)
+}
 
-fun allContain(polymers: List<Polymer>, subPolymer: Polymer) = polymers.all { contains(it, subPolymer) }
+fun allContain(polymers: List<Polymer>, subPolymer: Polymer): Boolean {
+    return polymers.all { contains(it, subPolymer) }
+}
 
-fun shortestPolymer(polymers: List<Polymer>) = polymers.minByOrNull(Polymer::count)
+fun <M : Monomer> shortestPolymer(polymers: List<List<M>>): List<M>? {
+    return polymers.minByOrNull(Polymer::count)
+}
 
-fun longestPolymer(polymers: List<Polymer>) = polymers.maxByOrNull(Polymer::count)
+fun <M : Monomer> longestPolymer(polymers: List<List<M>>): List<M>? {
+    return polymers.maxByOrNull(Polymer::count)
+}
 
-fun sharedSubPolymer(polymers: List<Polymer>): Polymer? {
+fun <M : Monomer> sharedSubPolymer(polymers: List<List<M>>): List<M>? {
     val shortestPolymer = shortestPolymer(polymers) ?: return null
     for (count in shortestPolymer.count() downTo 1) {
         for (subPolymer in shortestPolymer.windowed(count)) {
@@ -30,8 +48,8 @@ fun sharedSubPolymer(polymers: List<Polymer>): Polymer? {
     return null
 }
 
-fun profile(polymers: List<Polymer>): Map<Monomer, List<Int>> {
-    val profile = mutableMapOf<Monomer, MutableList<Int>>()
+fun <M : Monomer> profile(polymers: List<List<M>>): Map<M, List<Int>> {
+    val profile = mutableMapOf<M, MutableList<Int>>()
     val longestSequence = polymers.maxByOrNull { it.count() } ?: return profile
     for (sequence in polymers) {
         for (symbol in sequence.withIndex()) {
@@ -48,13 +66,13 @@ fun profile(polymers: List<Polymer>): Map<Monomer, List<Int>> {
     return profile
 }
 
-fun consensus(polymers: List<Polymer>): Polymer? {
+fun <M : Monomer> consensus(polymers: List<List<M>>): List<M>? {
     val longestPolymer = longestPolymer(polymers) ?: return null
-    val consensus = mutableListOf<Monomer>()
+    val consensus = mutableListOf<M>()
     val profile = profile(polymers)
     for (i in longestPolymer.indices) {
         var maxCount = 0
-        var mostCommonSymbol: Monomer? = null
+        var mostCommonSymbol: M? = null
         for (row in profile) {
             if (row.value[i] > maxCount) {
                 maxCount = row.value[i]
@@ -67,9 +85,13 @@ fun consensus(polymers: List<Polymer>): Polymer? {
     return consensus
 }
 
-fun reverseComplement(nucleicAcid: NucleicAcid) = nucleicAcid.map(::complement).asReversed()
+fun reverseComplement(nucleicAcid: NucleicAcid): NucleicAcid {
+    return nucleicAcid.map(::complement).asReversed()
+}
 
-fun isPalindrome(nucleicAcid: NucleicAcid) = nucleicAcid == reverseComplement(nucleicAcid)
+fun isPalindrome(nucleicAcid: NucleicAcid): Boolean {
+    return nucleicAcid == reverseComplement(nucleicAcid)
+}
 
 fun readingFrames(nucleicAcid: NucleicAcid): Set<NucleicAcid> {
     val readingFrames = mutableSetOf<NucleicAcid>()
@@ -83,10 +105,12 @@ fun readingFrames(nucleicAcid: NucleicAcid): Set<NucleicAcid> {
     return readingFrames
 }
 
-fun gcContent(nucleicAcid: NucleicAcid) = nucleicAcid.count(::isGc) / (nucleicAcid.count() / 100.0)
+fun gcContent(nucleicAcid: NucleicAcid): Double {
+    return nucleicAcid.count(::isGc) / (nucleicAcid.count() / 100.0)
+}
 
-fun palindromes(nucleicAcid: NucleicAcid, min: Int, max: Int): Map<NucleicAcid, List<Int>> {
-    val palindromes = mutableMapOf<NucleicAcid, MutableList<Int>>()
+fun <N : Nucleotide> palindromes(nucleicAcid: List<N>, min: Int, max: Int): Map<List<N>, List<Int>> {
+    val palindromes = mutableMapOf<List<N>, MutableList<Int>>()
     for (size in min..max) {
         val subsequences = nucleicAcid.windowed(size)
         for (subsequence in subsequences.withIndex()) {
@@ -120,11 +144,17 @@ fun transitionTransversionRate(a: NucleicAcid, b: NucleicAcid): Double {
     return transitions / transversions
 }
 
-fun transcript(dna: DNA): RNA = dna.map(::transcript)
+fun transcript(dna: DNA): RNA {
+    return dna.map(::transcript)
+}
 
-fun reverseTranscript(rna: RNA): DNA = rna.map(::reverseTranscript)
+fun reverseTranscript(rna: RNA): DNA {
+    return rna.map(::reverseTranscript)
+}
 
-fun triplets(rna: RNA) = rna.chunked(3).map { Triple(it[0], it[1], it[2]) }
+fun triplets(rna: RNA): List<Triple<RNANucleotide, RNANucleotide, RNANucleotide>> {
+    return rna.chunked(3).map { Triple(it[0], it[1], it[2]) }
+}
 
 fun translate(rna: RNA): Set<Protein> {
     val candidates = mutableSetOf<MutableList<AminoAcid>>()
@@ -144,4 +174,6 @@ fun translate(rna: RNA): Set<Protein> {
     return proteins
 }
 
-fun mass(protein: Protein): Double = protein.sumOf(::mass)
+fun mass(protein: Protein): Double {
+    return protein.sumOf(::mass)
+}
