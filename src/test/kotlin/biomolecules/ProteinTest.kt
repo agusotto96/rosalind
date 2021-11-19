@@ -10,7 +10,7 @@ internal class ProteinTest {
         val expected = 821.392
         val actual = "SKADYEK"
             .let(::Protein)
-            .let(Protein::mass)
+            .let(::mass)
         assertEquals(expected, actual, 0.001)
     }
 

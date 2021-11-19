@@ -12,7 +12,7 @@ internal class RNATest {
             .toSet()
         val actual = "AUGGCCAUGGCGCCCAGAACUGAGAUCAAUAGUACCCGUAUUAACGGGUGA"
             .let(::RNA)
-            .let(RNA::translate)
+            .let(::translate)
         assertEquals(expected, actual)
     }
 

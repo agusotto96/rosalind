@@ -11,7 +11,7 @@ internal class DNATest {
             .let(::RNA)
         val actual = "GATGGAACTTGACTACGTAAATT"
             .let(::DNA)
-            .let(DNA::transcript)
+            .let(::transcript)
         assertEquals(expected, actual)
     }
 
@@ -20,7 +20,7 @@ internal class DNATest {
         val expected = 60.91954
         val actual = "CCACCCTCGTGGTATGGCTAGGCATTCAGGAACCGGAGAACGCTTCAGACCAGCCCGGACTGGGAACCTGCGGGCAGTAGGTGGAAT"
             .let(::DNA)
-            .let(DNA::gcContent)
+            .let(::gcContent)
         assertEquals(expected, actual, 0.00001)
     }
 
@@ -30,7 +30,7 @@ internal class DNATest {
             .let(::DNA)
         val actual = listOf("ACGTACGT", "AACCGTATA")
             .map(::DNA)
-            .let(::sharedSubsequence)
+            .let(::sharedSubPolymer)
         assertEquals(expected, actual)
     }
 
@@ -40,17 +40,17 @@ internal class DNATest {
             .let(::DNA)
         val actual = "AAAACCCGGT"
             .let(::DNA)
-            .let(DNA::reverseComplement)
+            .let(::reverseComplement)
         assertEquals(expected, actual)
     }
 
     @Test
     fun profile() {
         val expected = mapOf(
-            Adenine to listOf(5, 1, 0, 0, 5, 5, 0, 0),
-            Cytosine to listOf(0, 0, 1, 4, 2, 0, 6, 1),
-            Guanine to listOf(1, 1, 6, 3, 0, 1, 0, 0),
-            Thymine to listOf(1, 5, 0, 0, 0, 1, 1, 6)
+            DNANucleotide.Adenine to listOf(5, 1, 0, 0, 5, 5, 0, 0),
+            DNANucleotide.Cytosine to listOf(0, 0, 1, 4, 2, 0, 6, 1),
+            DNANucleotide.Guanine to listOf(1, 1, 6, 3, 0, 1, 0, 0),
+            DNANucleotide.Thymine to listOf(1, 5, 0, 0, 0, 1, 1, 6)
         )
         val actual = listOf("ATCCAGCT", "GGGCAACT", "ATGGATCT", "AAGCAACC", "TTGGAACT", "ATGCCATT", "ATGGCACT")
             .map(::DNA)
@@ -74,7 +74,7 @@ internal class DNATest {
         val b = "TTATCTGACAAAGAAAGCCGTCAACGGCTGGATAATTTCGCGATCGTGCTGGTTACTGGCGGTACGAGTGTTCCTTTGGGT"
             .let(::DNA)
         val expected = 1.214
-        val actual = a.transitionTransversionRate(b)
+        val actual = transitionTransversionRate(a, b)
         assertEquals(expected, actual, 0.001)
     }
 

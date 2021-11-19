@@ -13,7 +13,6 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.21")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
 }
 
