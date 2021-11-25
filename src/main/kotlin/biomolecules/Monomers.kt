@@ -1,10 +1,10 @@
 package biomolecules
 
-internal sealed interface Monomer<Self : Monomer<Self>> {
+sealed interface Monomer<Self : Monomer<Self>> {
     fun symbol(): Char
 }
 
-internal sealed interface Nucleotide<Self : Nucleotide<Self>> : Monomer<Self> {
+sealed interface Nucleotide<Self : Nucleotide<Self>> : Monomer<Self> {
     fun complement(): Self
     fun isGc(): Boolean
     fun isPurine(): Boolean
