@@ -4,6 +4,7 @@ plugins {
     `java-library`
 }
 
+group = "com.github.agusotto96"
 version = "1.0-SNAPSHOT"
 
 repositories {
