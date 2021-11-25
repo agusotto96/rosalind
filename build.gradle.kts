@@ -1,7 +1,7 @@
 plugins {
     kotlin("jvm") version "1.6.0"
-    `maven-publish`
-    `java-library`
+    `maven-publish` apply true
+    `java-library` apply true
 }
 
 group = "com.github.agusotto96"
